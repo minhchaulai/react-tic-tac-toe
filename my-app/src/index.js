@@ -3,6 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
+var rowcol = {
+  0: '1, 1',
+  1: '1, 2',
+  2: '1, 3',
+  3: '2, 1',
+  4: '2, 2',
+  5: '2, 3',
+  6: '3, 1',
+  7: '3, 2',
+  8: '3, 3',
+}
+
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -49,10 +61,12 @@ class Game extends React.Component {
     super(props);
     this.state = {
       history: [{
-        squares: Array(9).fill(null)
+        squares: Array(9).fill(null),
+        move: null,
+        coordinates: null,
       }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
     };
   }
 
@@ -66,7 +80,9 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       history: history.concat([{
-        squares: squares
+        squares: squares,
+        move: i,
+        coordinates: i
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
@@ -86,10 +102,10 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
-
+    console.log(history);
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' + move :
+        'Go to move #' + move + ', chose square ' + rowcol[step.coordinates]:
         'Go to game start';
       return (
         <li key={move}>
